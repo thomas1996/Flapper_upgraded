@@ -65,32 +65,32 @@ app.factory('auth',['$http','$window',function($http,$window){
         }
     };
 
-  auth.currentUser = function(){
-    if(auth.isLoggedIn()){
-      var token = auth.getToken();
-      var payload = JSON.parse($window.atob(token.split('.')[1]));
+    auth.currentUser = function(){
+        if(auth.isLoggedIn()){
+            var token = auth.getToken();
+            var payload = JSON.parse($window.atob(token.split('.')[1]));
 
-      return payload.username;
-    }
-  };
+            return payload.username;
+        }
+    };
 
-  auth.register = function(user){
-    return $http.post('/register',user).success(function(data){
-      auth.saveToken(data.token);
-    });
-  };
+    auth.register = function(user){
+        return $http.post('/register',user).success(function(data){
+            auth.saveToken(data.token);
+        });
+    };
 
-  auth.logIn = function(user){
-    return $http.post('/login',user).success(function(data){
-        auth.saveToken(data.token);
-    });
-  };
+    auth.logIn = function(user){
+        return $http.post('/login',user).success(function(data){
+            auth.saveToken(data.token);
+        });
+    };
 
-  auth.logOut = function(){
-    $window.localStorage.removeItem('flapper-news-token');
-  };
-  return auth;
-  }]);
+    auth.logOut = function(){
+        $window.localStorage.removeItem('flapper-news-token');
+    };
+    return auth;
+}]);
 
 
 app.controller('MainCtrl',[
@@ -158,6 +158,10 @@ app.controller('PostCtrl',[
         $scope.decrementUpvotes = function(comment){
             posts.downvoteComment(post,comment);
         };
+        $scope.deleteComment = function(comment)
+        {
+            posts.deleteComment(post,comment);
+        }
 
 
     }]);
@@ -224,7 +228,7 @@ app.factory('posts',['$http','auth',function($http,auth){
 
     o.downvote = function(post)
     {
-        return $http.put('/posts/' + post._id + '/downvote',{
+        return $http.put('/posts/' + post._id + '/downvote',null,{
             headers: {Authorization: 'Bearer' + auth.getToken()}
         }).success(function(data) {
             post.votes -= 1;
@@ -249,17 +253,22 @@ app.factory('posts',['$http','auth',function($http,auth){
     };
 
     o.upvoteComment = function(post, comment) {
-        return $http.put('/posts/' + post._id + '/comments/'+ comment._id + '/upvote',null
+        return $http.put('/posts/' + post._id + '/comments/'+ comment._id + '/upvote'
         ).success(function(data){
             comment.upvotes += 1;
         });
     };
     o.downvoteComment = function(post,comment){
-        return $http.put('/posts/' + post._id + '/comments/'+ comment._id + '/downvote',{
-            headers: {Authorization: 'Bearer '+auth.getToken()}
-        }).success(function(data){
+        return $http.put('/posts/' + post._id + '/comments/'+ comment._id + '/downvote')
+        .success(function(data){
             comment.upvotes -= 1;
         });
     };
+    o.deleteComment = function(post,comment){
+        return $http.deleteComment('/posts/' + post._id + '/comments/' + comment._id
+    ).success(function(data){
+        angular.copy(data,o.comments);
+    });
+    }
     return o;
 }]);

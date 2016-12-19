@@ -30,9 +30,11 @@
             <h1>Flapper News</h1>
         </div>
         <div ng-repeat="post in posts | orderBy:'-upvotes'">
+          <div ng-show="isLoggedIn()">
             <span class="glyphicon glyphicon-thumbs-up" ng-click="incrementUpvotes(post)"></span>
              {{post.upvotes}}
             <span class="glyphicon glyphicon-thumbs-down" ng-click="decrementUpvotes(post)"></span>
+            </div>
             <span style="font-size:20px; margin-left:10px;">
                 <a ng-show="post.link" href="{{post.link}}">
                     {{post.title}}
@@ -47,7 +49,8 @@
             <span>
                 <a href="#/posts/{{post._id}}">Comments({{post.comments.length}})</a>
             </span>
-            <span style="float: right;" ng-click="deletePost(post)">
+
+            <span ng-show="isLoggedIn()" style="float: right;" ng-click="deletePost(post)">
                 <a href="#">Delete</a>
             </span>
         </div>
@@ -85,6 +88,9 @@
             - by {{comment.author}}
             <span style="font-size:20px; margin-left:10px;">
             {{comment.body}}
+            </span>
+            <span ng-show="isLoggedIn()" style="float: right;" ng-click="deleteComment(comment)">
+                <a href="#">Delete</a>
             </span>
         </div>
         <!-- add new comment-->

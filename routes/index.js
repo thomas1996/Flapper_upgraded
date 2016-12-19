@@ -63,9 +63,7 @@ router.get('/posts/:post',function(req,res,next){
 });
 //delete post
 router.delete('/posts/:post',function(req,res){
-    console.log("hallo");
     req.post.comments.forEach(function(id){
-        Console.log("hallo");
         Comment.remove({
             _id:id
         },function(err){
@@ -121,17 +119,16 @@ router.post('/posts/:post/comments',auth,function(req,res,next){
     });
 });
 //upvote comment
-router.put('/posts/:post/comments/:comment/upvote', auth, function(req, res, next) {
+router.put('/posts/:post/comments/:comment/upvote', function(req, res, next) {
     req.comment.upvote(function(err, comment){
         if (err) {
-        console.log(err);
             return next(err); }
 
         res.json(comment);
     });
 });
 
-router.put('/posts/:post/commments/:comment/downvote',auth,function(req,res,next){
+router.put('/posts/:post/commments/:comment/downvote',function(req,res,next){
     req.comment.downvote(function(err,comment){
         if(err){return next(err);}
 
