@@ -8,7 +8,7 @@ var bodyParser = require('body-parser');
 //mongoDB
 var mongoose = require('mongoose');
 var passport = require('passport');
-mongoose.connect('mongodb://<hogent>:<hogent>@ds135818.mlab.com:35818/post');
+mongoose.connect('mongodb://<test>:<test>@ds135818.mlab.com:35818/post');
 
 require('./models/Posts');
 require('./models/Comments');
