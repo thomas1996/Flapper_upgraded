@@ -1,8 +1,41 @@
 body {
   padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-}
 
+  background-image: url("website-backgrounds.jpg");
+  color: #FFFFFF;
+  text-decoration: none;
+
+  ;
+}
+html{
+  background-image: url("website-backgrounds.jpg");
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif#;
+    text-decoration: none;
+
+}
+nav a {
+color: #FFFFFF;
+}
+nav a ul li{
+color: #FFFFFF}
+
+.border{
+  border: 2px black solid;
+  margin-top: 1em;
+  padding: auto;
+  line-height: 2em;
+  font-size: 1.2em;
+}
 a {
-  color: #00B7FF;
+  color: #FFFFFF;
+  text-decoration: none;
+}
+a:hover{
+  color:#000000;
+  font-size: :16px;
+  font-weight: bold;
+  text-decoration: none;
+}
+form div input{ div input
+  background-color: #7f7a7a;
 }

@@ -121,7 +121,11 @@ app.controller('MainCtrl',[
             $scope.link = '';
         };
         $scope.deletePost = function(post){
-            posts.delete(post);
+            if(auth.currentUser() === post.author)
+            {posts.delete(post);}
+            else {
+                alert('You can only delete posts that are yours');
+            }
         };
 
         $scope.incrementUpvotes = function(post){
@@ -156,14 +160,13 @@ app.controller('PostCtrl',[
             posts.upvoteComment(post, comment);
         };
         $scope.decrementUpvotes = function(comment){
+          console.log("1");
             posts.downvoteComment(post,comment);
         };
         $scope.deleteComment = function(comment)
         {
             posts.deleteComment(post,comment);
-        }
-
-
+        };
     }]);
 app.controller('AuthCtrl',[
     '$scope',
@@ -228,12 +231,12 @@ app.factory('posts',['$http','auth',function($http,auth){
 
     o.downvote = function(post)
     {
-        return $http.put('/posts/' + post._id + '/downvote',null,{
-            headers: {Authorization: 'Bearer' + auth.getToken()}
-        }).success(function(data) {
-            post.votes -= 1;
-        });
-    }
+        return $http.put('/posts/' + post._id + '/downvote'
+      ).success(function(data) {
+          if(post.upvotes>0)
+          {post.upvotes -= 1;}
+      });
+    };
 
     o.get = function(id){
         return $http.get('/posts/' + id).then(function(res){
@@ -259,9 +262,10 @@ app.factory('posts',['$http','auth',function($http,auth){
         });
     };
     o.downvoteComment = function(post,comment){
-        return $http.put('/posts/' + post._id + '/comments/'+ comment._id + '/downvote')
-        .success(function(data){
-            comment.upvotes -= 1;
+        return $http.put('/posts/' + post._id + '/comments/'+ comment._id + '/downvote'
+      ).success(function(data){
+            if(comment.upvotes>0)
+                comment.upvotes -= 1;
         });
     };
     o.deleteComment = function(post,comment){
@@ -269,6 +273,6 @@ app.factory('posts',['$http','auth',function($http,auth){
     ).success(function(data){
         angular.copy(data,o.comments);
     });
-    }
+    };
     return o;
 }]);

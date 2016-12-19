@@ -93,7 +93,7 @@ router.put('/posts/:post/upvote',auth,function(req,res,next){
     });
 });
 //downvote post
-router.put('/posts/:post/downvote',auth,function(req,res,next){
+router.put('/posts/:post/downvote',function(req,res,next){
     req.post.downvote(function(err,post){
         if(err){return next(err);}
         res.json(post);
@@ -118,6 +118,17 @@ router.post('/posts/:post/comments',auth,function(req,res,next){
         });
     });
 });
+
+router.put('/posts/:post/comments/:comment/downvote',function(req,res,next){
+  console.log("4");
+    req.comment.downvote(function(err,comment){
+      console.log("5");
+        if(err){return next(err);}
+        console.log("6")
+
+        res.json(comment);
+    });
+});
 //upvote comment
 router.put('/posts/:post/comments/:comment/upvote', function(req, res, next) {
     req.comment.upvote(function(err, comment){
@@ -128,13 +139,25 @@ router.put('/posts/:post/comments/:comment/upvote', function(req, res, next) {
     });
 });
 
-router.put('/posts/:post/commments/:comment/downvote',function(req,res,next){
-    req.comment.downvote(function(err,comment){
+
+/*
+router.deleteComment('/posts/:post/comments/:comment',function(req,res,next){
+    req.comments.delete(function(id){
+        Comment.remove({
+            _id:id
+        },function(err){
+            if(err)
+            {return next(err);}
+        });
+    });
+        //get and return all the remaining posts
+    Comment.find(function(err,posts){
         if(err){return next(err);}
 
-        res.json(comment);
+        res.json(posts);
     });
 });
+*/
 //map to route parameter 'commment'
 router.param('comment',function(req,res,next,id){
     var query = Comment.findById(id);
@@ -152,6 +175,21 @@ router.param('comment',function(req,res,next,id){
     });
 });
 
+//get user
+/*
+router.getUser('/users/:user',function(req,res){
+    User.find(function(err,user){
+        if(res.json(User)!=null){
+            return res.json(user);
+        }else {
+            return null;
+        }
+
+
+    });
+});
+*/
+
 //Register
 
 router.post('/register',function(req,res,next){
@@ -159,18 +197,23 @@ router.post('/register',function(req,res,next){
         return res.statur(400).json({message: 'please fill out all fields'});
     }
     var user = new User();
-    user.username = req.body.username;
-    user.setPassword(req.body.password);
+  //  if(this.getUser===null)
+    //{
+        user.username = req.body.username;
+        user.setPassword(req.body.password);
 
-    user.save(function(err){
-        if(err) {
+        user.save(function(err){
+            if(err) {
+                return res.status(400).json({message: 'Username already exist'});
+            }
 
-            return next(err);
-        }
 
-
-        return res.json({token: user.generateJWT()});
-    });
+            return res.json({token: user.generateJWT()});
+        });
+    //}
+    //else {
+      //  return res.statur(400).json({message: 'Username already exist'});
+  //  }
 });
 
 //log in
