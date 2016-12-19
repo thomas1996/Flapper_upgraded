@@ -11,6 +11,7 @@ html{
   background-image: url("website-backgrounds.jpg");
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif#;
     text-decoration: none;
+    text-align: center;
 
 }
 nav a {
@@ -22,9 +23,10 @@ color: #FFFFFF}
 .border{
   border: 2px black solid;
   margin-top: 1em;
-  padding: auto;
+  padding-left: 1em;
   line-height: 2em;
-  font-size: 1.2em;
+  font-size: 1.3em;
+  text-align: center;
 }
 a {
   color: #FFFFFF;
